@@ -35,7 +35,7 @@ export default class AppUpdater {
   }
 }
 
-let mainWindow: BrowserWindow | null = null;
+let mainWindow = null;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -71,7 +71,7 @@ const createWindow = async () => {
     ? path.join(process.resourcesPath, 'assets')
     : path.join(__dirname, '../../assets');
 
-  const getAssetPath = (...paths: string[]): string => {
+  const getAssetPath = (...paths) => {
     return path.join(RESOURCES_PATH, ...paths);
   };
 
@@ -120,11 +120,9 @@ const createWindow = async () => {
 
 ipcMain.handle('get-user-data-path', () => electronApp.getPath('userData'));
 
-let currentUser: Realm.User | null = realmApp.currentUser?.id
-  ? realmApp.currentUser
-  : null;
-let realmDb: Realm | null = null;
-let realmDbConfig: Realm.Configuration | null = null;
+let currentUser = realmApp.currentUser?.id ? realmApp.currentUser : null;
+let realmDb = null;
+let realmDbConfig = null;
 
 ipcMain.handle('log-in-user', async (_, { username, password }) => {
   console.log('logging in user. creds are', username, password);
@@ -138,34 +136,28 @@ ipcMain.handle('log-in-user', async (_, { username, password }) => {
   }
 });
 
-ipcMain.handle(
-  'open-realm',
-  async (
-    _: Electron.IpcMainInvokeEvent,
-    config: Realm.Configuration
-  ): Promise<boolean | null> => {
-    if (!currentUser) {
-      console.error('no current user. cannot open realm.');
-      return null;
-    }
-    if (!config?.sync?.user?.id) {
-      console.log('opening realm with user', currentUser?.id);
-      // @ts-ignore
-      config.sync.user = currentUser;
-    }
-    let res;
-    try {
-      realmDb = await Realm.open(config);
-      realmDbConfig = config;
-      console.log('opened realm');
-      res = true;
-    } catch (err) {
-      console.error('error in main process invoking `open-realm`', err);
-      res = null;
-    }
-    return res;
+ipcMain.handle('open-realm', async (_, config) => {
+  if (!currentUser) {
+    console.error('no current user. cannot open realm.');
+    return null;
   }
-);
+  if (!config?.sync?.user?.id) {
+    console.log('opening realm with user', currentUser?.id);
+    // @ts-ignore
+    config.sync.user = currentUser;
+  }
+  let res;
+  try {
+    realmDb = await Realm.open(config);
+    realmDbConfig = config;
+    console.log('opened realm');
+    res = true;
+  } catch (err) {
+    console.error('error in main process invoking `open-realm`', err);
+    res = null;
+  }
+  return res;
+});
 
 ipcMain.handle('close-and-log-out', async () => {
   console.log('close and log out', currentUser?.id, realmDb);

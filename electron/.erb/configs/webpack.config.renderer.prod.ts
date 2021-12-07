@@ -35,7 +35,7 @@ export default merge(baseConfig, {
   entry: [
     'core-js',
     'regenerator-runtime/runtime',
-    path.join(webpackPaths.srcRendererPath, 'index.tsx'),
+    path.join(webpackPaths.srcRendererPath, 'index.jsx'),
   ],
 
   output: {
@@ -115,7 +115,7 @@ export default merge(baseConfig, {
 
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: path.join(webpackPaths.srcRendererPath, 'index.ejs'),
+      template: path.join(webpackPaths.srcRendererPath, 'index.html'),
       minify: {
         collapseWhitespace: true,
         removeAttributeQuotes: true,
