@@ -9,6 +9,7 @@ import Realm from 'realm';
 import { ipcRenderer } from 'electron';
 import path from 'path';
 import { Todo } from 'schemas';
+import { useHistory } from 'react-router';
 
 function createRealmApp(appId) {
   return new Realm.App(appId);
@@ -53,6 +54,7 @@ function RealmAppProvider({ appId, children }) {
   // and use the new realmApp.
   const [realmApp, setRealmApp] = useState(createRealmApp(appId));
   const [realmDb, setRealmDb] = useState(null);
+  const history = useHistory();
 
   useEffect(() => {
     setRealmApp(createRealmApp(appId));
@@ -122,6 +124,7 @@ function RealmAppProvider({ appId, children }) {
     realmDb?.close();
     await currentUser?.logOut();
     const res = await ipcRenderer.invoke('close-and-log-out');
+    history.push('/');
     setCurrentUser(null);
     setRealmDb(null);
   }, [realmApp, currentUser]);

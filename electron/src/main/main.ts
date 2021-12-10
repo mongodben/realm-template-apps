@@ -170,7 +170,9 @@ ipcMain.handle(
 ipcMain.handle('close-and-log-out', async () => {
   console.log('close and log out', currentUser?.id, realmDb);
   realmDb?.close();
-  await currentUser?.logOut();
+  if (currentUser?.isLoggedIn) {
+    await currentUser?.logOut();
+  }
   if (realmDbConfig !== null) Realm.deleteFile(realmDbConfig);
   currentUser = null;
   realmDb = null;

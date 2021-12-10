@@ -107,11 +107,11 @@ const App = () => {
 // has access to the `useHistory` hook.
 // See https://stackoverflow.com/a/68173854/17093063
 const AppWithProvider = () => (
-  <RealmAppProvider appId={appId}>
-    <Router>
+  <Router>
+    <RealmAppProvider appId={appId}>
       <App />
       <FooterInfo />
-    </Router>
-  </RealmAppProvider>
+    </RealmAppProvider>
+  </Router>
 );
 export default AppWithProvider;
