@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/viewmodels/task_viewmodel.dart';
+import 'package:flutter_todo/viewmodels/item_viewmodel.dart';
 
 class SelectPriority extends StatefulWidget {
   int priority;
