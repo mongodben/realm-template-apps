@@ -113,8 +113,10 @@ class _CreateItemFormState extends State<CreateItemForm> {
                           if (_formKey.currentState!.validate()) {
                             print('pressed again');
                             final summary = taskEditingController.text;
-                            ItemViewModel.create(realm,
-                                Item(ObjectId(), summary, currentUser!.id));
+                            ItemViewModel.create(
+                                realm,
+                                Item(ObjectId(), summary, currentUser!.id,
+                                    priority: _priority));
                             Navigator.pop(context);
                           }
                         },
