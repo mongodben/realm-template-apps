@@ -14,6 +14,7 @@ class Item extends _Item with RealmEntity, RealmObject {
     String summary,
     String ownerId, {
     bool isComplete = false,
+    int? priority,
   }) {
     if (!_defaultsSet) {
       _defaultsSet = RealmObject.setDefaults<Item>({
@@ -24,6 +25,7 @@ class Item extends _Item with RealmEntity, RealmObject {
     RealmObject.set(this, 'isComplete', isComplete);
     RealmObject.set(this, 'summary', summary);
     RealmObject.set(this, 'owner_id', ownerId);
+    RealmObject.set(this, 'priority', priority);
   }
 
   Item._();
@@ -49,6 +51,11 @@ class Item extends _Item with RealmEntity, RealmObject {
   set ownerId(String value) => RealmObject.set(this, 'owner_id', value);
 
   @override
+  int? get priority => RealmObject.get<int>(this, 'priority') as int?;
+  @override
+  set priority(int? value) => RealmObject.set(this, 'priority', value);
+
+  @override
   Stream<RealmObjectChanges<Item>> get changes =>
       RealmObject.getChanges<Item>(this);
 
@@ -62,6 +69,7 @@ class Item extends _Item with RealmEntity, RealmObject {
       SchemaProperty('isComplete', RealmPropertyType.bool),
       SchemaProperty('summary', RealmPropertyType.string),
       SchemaProperty('owner_id', RealmPropertyType.string, mapTo: 'owner_id'),
+      SchemaProperty('priority', RealmPropertyType.int, optional: true),
     ]);
   }
 }

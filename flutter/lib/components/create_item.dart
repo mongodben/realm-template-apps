@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_todo/components/select_priority.dart';
 import 'package:provider/provider.dart';
 import 'package:realm/realm.dart';
 import 'package:flutter_todo/realm/schemas.dart';
@@ -54,7 +55,7 @@ class CreateItemForm extends StatefulWidget {
 
 class _CreateItemFormState extends State<CreateItemForm> {
   final _formKey = GlobalKey<FormState>();
-  var itemEditingController = TextEditingController();
+  var taskEditingController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class _CreateItemFormState extends State<CreateItemForm> {
             style: myTextTheme.headline6,
           ),
           TextFormField(
-            controller: itemEditingController,
+            controller: taskEditingController,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter some text';
@@ -80,6 +81,7 @@ class _CreateItemFormState extends State<CreateItemForm> {
               return null;
             },
           ),
+          SelectPriority(priorityLevel, setPriority),
           Padding(
             padding: const EdgeInsets.only(top: 15),
             child: Row(
@@ -103,9 +105,9 @@ class _CreateItemFormState extends State<CreateItemForm> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             print('pressed again');
-                            final summary = itemEditingController.text;
-                            ItemViewModel.create(realm,
-                                Item(ObjectId(), summary, currentUser!.id));
+                            final summary = taskEditingController.text;
+                            TaskViewModel.create(realm,
+                                Task(ObjectId(), summary, currentUser!.id));
                             Navigator.pop(context);
                           }
                         },

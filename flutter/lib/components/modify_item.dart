@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/viewmodels/item_viewmodel.dart';
+<<<<<<< HEAD:flutter/lib/components/modify_item.dart
+=======
+import 'package:flutter_todo/components/select_priority.dart';
+>>>>>>> acb71da (end state):flutter/lib/components/modify_task.dart
 
 void showModifyItemModal(BuildContext context, ItemViewModel item) {
   showModalBottomSheet(
@@ -21,12 +25,17 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
   final _formKey = GlobalKey<FormState>();
   late bool _isComplete;
   late String _summary;
+  late int _priority;
 
   @override
   void initState() {
     super.initState();
     _summary = widget.item.summary;
     _isComplete = widget.item.isComplete;
+<<<<<<< HEAD:flutter/lib/components/modify_item.dart
+=======
+    _priority = widget.item.priority;
+>>>>>>> acb71da (end state):flutter/lib/components/modify_task.dart
   }
 
   @override
@@ -35,7 +44,12 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
     final item = widget.item;
 
     void updateItem() {
+<<<<<<< HEAD:flutter/lib/components/modify_item.dart
       item.update(summary: _summary, isComplete: _isComplete);
+=======
+      item.update(
+          summary: _summary, isComplete: _isComplete, priority: _priority);
+>>>>>>> acb71da (end state):flutter/lib/components/modify_task.dart
     }
 
     void deleteItem() {
@@ -45,6 +59,12 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
     void handleItemRadioChange(bool? value) {
       setState(() {
         _isComplete = value ?? false;
+      });
+    }
+
+    void setPriority(int priority) {
+      setState(() {
+        _priority = priority;
       });
     }
 
@@ -84,6 +104,7 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
                     return null;
                   },
                 ),
+                SelectPriority(_priority, setPriority),
                 Column(
                   children: <Widget>[
                     RadioListTile(
