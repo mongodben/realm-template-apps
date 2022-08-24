@@ -54,8 +54,15 @@ class CreateItemForm extends StatefulWidget {
 }
 
 class _CreateItemFormState extends State<CreateItemForm> {
+  int _priority = PriorityLevel.low;
   final _formKey = GlobalKey<FormState>();
   var taskEditingController = TextEditingController();
+
+  void _setPriority(int priority) {
+    setState(() {
+      _priority = priority;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +88,7 @@ class _CreateItemFormState extends State<CreateItemForm> {
               return null;
             },
           ),
-          SelectPriority(priorityLevel, setPriority),
+          SelectPriority(_priority, _setPriority),
           Padding(
             padding: const EdgeInsets.only(top: 15),
             child: Row(
@@ -106,8 +113,8 @@ class _CreateItemFormState extends State<CreateItemForm> {
                           if (_formKey.currentState!.validate()) {
                             print('pressed again');
                             final summary = taskEditingController.text;
-                            TaskViewModel.create(realm,
-                                Task(ObjectId(), summary, currentUser!.id));
+                            ItemViewModel.create(realm,
+                                Item(ObjectId(), summary, currentUser!.id));
                             Navigator.pop(context);
                           }
                         },
