@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_todo/components/select_priority.dart';
 import 'package:provider/provider.dart';
 import 'package:realm/realm.dart';
 import 'package:flutter_todo/realm/schemas.dart';
 import 'package:flutter_todo/realm/app_services.dart';
 import 'package:flutter_todo/viewmodels/item_viewmodel.dart';
+import 'package:flutter_todo/components/select_priority.dart';
 
 class CreateItem extends StatelessWidget {
   const CreateItem({Key? key}) : super(key: key);
