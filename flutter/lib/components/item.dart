@@ -5,11 +5,11 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'modify_item.dart';
 import 'package:flutter_todo/viewmodels/item_viewmodel.dart';
 
-class ItemItem extends StatelessWidget {
+class Item extends StatelessWidget {
   final ItemViewModel viewModel;
   final Animation<double> animation;
 
-  const ItemItem(this.viewModel, this.animation, {Key? key}) : super(key: key);
+  const Item(this.viewModel, this.animation, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

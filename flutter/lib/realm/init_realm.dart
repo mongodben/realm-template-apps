@@ -7,15 +7,17 @@ Realm initRealm(User currentUser) {
   Realm realm = Realm(
     config,
   );
-  final userTaskSub = realm.subscriptions.findByName('getUserItems');
+  final userTaskSub =
+      realm.subscriptions.findByName('getUserItemsWithPriority2');
   if (userTaskSub == null) {
     realm.subscriptions.update((mutableSubscriptions) {
       // server-side rules ensure user only downloads own tasks
       mutableSubscriptions.add(
           realm.query<Item>(
-            'priority <= ${PriorityLevel.high}',
+            'priority <= \$0 OR priority == nil',
+            [PriorityLevel.high],
           ),
-          name: 'getUserItems');
+          name: 'getUserItemsWithPriority2');
     });
   }
   return realm;
