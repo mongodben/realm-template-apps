@@ -7,18 +7,55 @@ Realm initRealm(User currentUser) {
   Realm realm = Realm(
     config,
   );
+  // :snippet-start: updated-sub
   final userTaskSub =
-      realm.subscriptions.findByName('getUserItemsWithPriority2');
+      realm.subscriptions.findByName('getUserItemsWithPriority'); // :emphasize:
   if (userTaskSub == null) {
     realm.subscriptions.update((mutableSubscriptions) {
       // server-side rules ensure user only downloads own tasks
       mutableSubscriptions.add(
+          // :emphasize-start:
           realm.query<Item>(
             'priority <= \$0 OR priority == nil',
             [PriorityLevel.high],
           ),
-          name: 'getUserItemsWithPriority2');
+          name: 'getUserItemsWithPriority');
+      // :emphasize-end:
     });
   }
+  // :snippet-end:
   return realm;
+}
+
+// old making for bluehawkification
+void _oldVersion(User user, Configuration config, Realm realm) {
+  // :snippet-start: base-version
+  final userItemSub = realm.subscriptions.findByName('getUserItems');
+  if (userItemSub == null) {
+    realm.subscriptions.update((mutableSubscriptions) {
+      // server-side rules ensure user only downloads own items
+      mutableSubscriptions.add(realm.all<Item>(), name: 'getUserItems');
+    });
+  }
+  // :snippet-end:
+}
+
+void _postUpdateWithNullVersion(User user, Configuration config, Realm realm) {
+  // :snippet-start: post-update
+  // :emphasize-start:
+  final userItemSub =
+      realm.subscriptions.findByName('getUserItemsWithHighOrNoPriority');
+  // :emphasize-end:
+  if (userItemSub == null) {
+    realm.subscriptions.update((mutableSubscriptions) {
+      // server-side rules ensure user only downloads own items
+      // :emphasize-start:
+      mutableSubscriptions.add(
+          realm.query<Item>(
+              'priority <= \$0 OR priority == nil', [PriorityLevel.high]),
+          name: 'getUserItemsWithHighOrNoPriority');
+      // :emphasize-end:
+    });
+  }
+  // :snippet-end:
 }

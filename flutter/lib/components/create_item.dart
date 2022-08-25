@@ -1,11 +1,17 @@
+// :snippet-start: create-item
+// :remove-start:
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:realm/realm.dart';
 import 'package:flutter_todo/realm/schemas.dart';
 import 'package:flutter_todo/realm/app_services.dart';
+// :remove-end:
+// ... other imports
 import 'package:flutter_todo/viewmodels/item_viewmodel.dart';
-import 'package:flutter_todo/components/select_priority.dart';
+import 'package:flutter_todo/components/select_priority.dart'; // :emphasize:
 
+// ... CreateItem widget
+// :remove-start:
 class CreateItem extends StatelessWidget {
   const CreateItem({Key? key}) : super(key: key);
 
@@ -26,7 +32,10 @@ class CreateItem extends StatelessWidget {
     );
   }
 }
+// :remove-end:
 
+// _CreateItemFormWrapper widget
+// :remove-start:
 class _CreateItemFormWrapper extends StatelessWidget {
   const _CreateItemFormWrapper({Key? key}) : super(key: key);
 
@@ -37,7 +46,6 @@ class _CreateItemFormWrapper extends StatelessWidget {
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Container(
             color: Colors.grey.shade100,
-            // height: 200,
             padding:
                 const EdgeInsets.only(top: 25, bottom: 25, left: 50, right: 50),
             child: const Center(
@@ -45,6 +53,7 @@ class _CreateItemFormWrapper extends StatelessWidget {
             )));
   }
 }
+// :remove-end:
 
 class CreateItemForm extends StatefulWidget {
   const CreateItemForm({Key? key}) : super(key: key);
@@ -54,15 +63,17 @@ class CreateItemForm extends StatefulWidget {
 }
 
 class _CreateItemFormState extends State<CreateItemForm> {
-  int _priority = PriorityLevel.low;
+  int _priority = PriorityLevel.low; // :emphasize:
   final _formKey = GlobalKey<FormState>();
   var taskEditingController = TextEditingController();
 
+  // :emphasize-start:
   void _setPriority(int priority) {
     setState(() {
       _priority = priority;
     });
   }
+  // :emphasize-end:
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +86,8 @@ class _CreateItemFormState extends State<CreateItemForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          // ... other widgets
+          // :remove-start:
           Text(
             'Create a New Item',
             style: myTextTheme.headline6,
@@ -88,7 +101,10 @@ class _CreateItemFormState extends State<CreateItemForm> {
               return null;
             },
           ),
-          SelectPriority(_priority, _setPriority),
+          // :remove-end:
+          SelectPriority(_priority, _setPriority), // :emphasize:
+          // .. other widgets
+          // :remove-start:
           Padding(
             padding: const EdgeInsets.only(top: 15),
             child: Row(
@@ -127,8 +143,10 @@ class _CreateItemFormState extends State<CreateItemForm> {
               ],
             ),
           ),
+          // :remove-end:
         ],
       ),
     );
   }
 }
+// :snippet-end:

@@ -1,7 +1,13 @@
+// :snippet-start: modify-item
+// ... other imports
+// :remove-start:
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/viewmodels/item_viewmodel.dart';
+// :remove-end:
 import 'package:flutter_todo/components/select_priority.dart';
 
+// showModifyItemModal function
+// :remove-start:
 void showModifyItemModal(BuildContext context, ItemViewModel item) {
   showModalBottomSheet(
     context: context,
@@ -9,6 +15,7 @@ void showModifyItemModal(BuildContext context, ItemViewModel item) {
     builder: (_) => Wrap(children: [ModifyItemForm(item)]),
   );
 }
+// :remove-end:
 
 class ModifyItemForm extends StatefulWidget {
   final ItemViewModel item;
@@ -22,14 +29,14 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
   final _formKey = GlobalKey<FormState>();
   late bool _isComplete;
   late String _summary;
-  late int _priority;
+  late int _priority; // :emphasize:
 
   @override
   void initState() {
     super.initState();
     _summary = widget.item.summary;
     _isComplete = widget.item.isComplete;
-    _priority = widget.item.priority;
+    _priority = widget.item.priority; // :emphasize:
   }
 
   @override
@@ -37,11 +44,15 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
     TextTheme myTextTheme = Theme.of(context).textTheme;
     final item = widget.item;
 
+    // :emphasize-start:
     void updateItem() {
       item.update(
           summary: _summary, isComplete: _isComplete, priority: _priority);
     }
+    // :emphasize-end:
 
+    // deleteItem and handleItemRadioChange functions
+    // :remove-start:
     void deleteItem() {
       item.delete();
     }
@@ -51,12 +62,15 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
         _isComplete = value ?? false;
       });
     }
+    // :remove-end:
 
+    // :emphasize-start:
     void _setPriority(int priority) {
       setState(() {
         _priority = priority;
       });
     }
+    // :emphasize-end:
 
     return Padding(
       padding:
@@ -76,6 +90,8 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                // ... other widgets
+                // :remove-start:
                 Text(
                   'Update Your Item',
                   style: myTextTheme.headline6,
@@ -94,7 +110,10 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
                     return null;
                   },
                 ),
+                // :remove-end:
                 SelectPriority(_priority, _setPriority),
+                // ... other widgets
+                // :remove-start:
                 Column(
                   children: <Widget>[
                     RadioListTile(
@@ -152,6 +171,7 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
                     ],
                   ),
                 ),
+                // :remove-end:
               ],
             ),
           ),
@@ -160,3 +180,4 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
     );
   }
 }
+// :snippet-end:

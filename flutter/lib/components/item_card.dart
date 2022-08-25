@@ -1,9 +1,12 @@
+// ...imports
+// :remove-start:
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:realm/realm.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'modify_item.dart';
 import 'package:flutter_todo/viewmodels/item_viewmodel.dart';
+// :remove-end:
 
 class ItemCard extends StatelessWidget {
   final ItemViewModel viewModel;
@@ -26,6 +29,8 @@ class ItemCard extends StatelessWidget {
         child: AnimatedSwitcher(
           duration: const Duration(milliseconds: 300),
           child: Slidable(
+            // endActionPane property and children widgets
+            // :remove-start:
             endActionPane: ActionPane(
               motion: const ScrollMotion(),
               children: [
@@ -51,8 +56,10 @@ class ItemCard extends StatelessWidget {
                 )
               ],
             ),
+            // :remove-end:
             child: Card(
               child: ListTile(
+                // :emphasize-start:
                 title: Row(
                   children: [
                     Padding(
@@ -62,6 +69,7 @@ class ItemCard extends StatelessWidget {
                     SizedBox(width: 175, child: Text(viewModel.summary)),
                   ],
                 ),
+                // :emphasize-end:
                 subtitle:
                     Text(viewModel.isComplete ? 'Completed' : 'Incomplete'),
                 leading: _CompleteCheckbox(viewModel),
@@ -74,6 +82,8 @@ class ItemCard extends StatelessWidget {
   }
 }
 
+// _CompleteCheckbox widget
+// :remove-start:
 class _CompleteCheckbox extends StatelessWidget {
   final ItemViewModel viewModel;
   const _CompleteCheckbox(this.viewModel, {Key? key}) : super(key: key);
@@ -103,7 +113,9 @@ class _CompleteCheckbox extends StatelessWidget {
     );
   }
 }
+// :remove-end:
 
+// :emphasize-start:
 class _PriorityIndicator extends StatelessWidget {
   final int? priority;
   const _PriorityIndicator(this.priority, {Key? key}) : super(key: key);
@@ -130,3 +142,4 @@ class _PriorityIndicator extends StatelessWidget {
     return getIconForPriority(priority);
   }
 }
+// :emphasize-end:
