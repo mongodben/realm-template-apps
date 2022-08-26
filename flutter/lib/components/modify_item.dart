@@ -111,7 +111,7 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
                   },
                 ),
                 // :remove-end:
-                SelectPriority(_priority, _setPriority),
+                SelectPriority(_priority, _setPriority), // :emphasize:
                 // ... other widgets
                 // :remove-start:
                 Column(

@@ -1,3 +1,4 @@
+// :snippet-start: item-card
 // ...imports
 // :remove-start:
 import 'package:flutter/material.dart';
@@ -143,3 +144,4 @@ class _PriorityIndicator extends StatelessWidget {
   }
 }
 // :emphasize-end:
+// :snippet-end:
