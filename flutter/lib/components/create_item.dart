@@ -144,14 +144,14 @@ class _CreateItemFormState extends State<CreateItemForm> {
                   ),
                 ),
                 // :remove-start:
-                // ...closing brackets and parenthesis
               ],
             ),
           ),
         ],
-        // :remove-end:
       ),
     );
   }
 }
+// :remove-end:
+// ...closing brackets and parenthesis
 // :snippet-end:
