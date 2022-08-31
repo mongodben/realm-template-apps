@@ -4,7 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_todo/viewmodels/item_viewmodel.dart';
 // :remove-end:
-import 'package:flutter_todo/components/select_priority.dart';
+import 'package:flutter_todo/components/select_priority.dart'; // :emphasize:
 
 // showModifyItemModal function
 // :remove-start:
@@ -90,7 +90,7 @@ class _ModifyItemFormState extends State<ModifyItemForm> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                // ... other widgets
+                // ... Text and TextFormField widgets
                 // :remove-start:
                 Text(
                   'Update Your Item',

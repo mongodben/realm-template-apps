@@ -86,7 +86,7 @@ class _CreateItemFormState extends State<CreateItemForm> {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          // ... other widgets
+          // ... Text and TextFormField widgets
           // :remove-start:
           Text(
             'Create a New Item',
@@ -119,6 +119,8 @@ class _CreateItemFormState extends State<CreateItemForm> {
                               MaterialStateProperty.all(Colors.grey)),
                       onPressed: () => Navigator.pop(context)),
                 ),
+                // :remove-end:
+                // Set priority when creating an Item
                 Container(
                   margin: const EdgeInsets.symmetric(horizontal: 10),
                   child: Consumer<Realm>(
@@ -127,12 +129,13 @@ class _CreateItemFormState extends State<CreateItemForm> {
                         child: const Text('Create'),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            print('pressed again');
                             final summary = taskEditingController.text;
+                            // :emphasize-start:
                             ItemViewModel.create(
                                 realm,
                                 Item(ObjectId(), summary, currentUser!.id,
                                     priority: _priority));
+                            // :emphasize-end:
                             Navigator.pop(context);
                           }
                         },
@@ -140,11 +143,13 @@ class _CreateItemFormState extends State<CreateItemForm> {
                     },
                   ),
                 ),
+                // :remove-start:
+                // ...closing brackets and parenthesis
               ],
             ),
           ),
-          // :remove-end:
         ],
+        // :remove-end:
       ),
     );
   }
