@@ -8,24 +8,36 @@ Realm initRealm(User currentUser) {
     config,
   );
   // :snippet-start: updated-sub
-  final userItemSub =
-      realm.subscriptions.findByName('getUserItemsWithPriority'); // :emphasize:
-  if (userItemSub == null) {
-    realm.subscriptions.update((mutableSubscriptions) {
-      // server-side rules ensure user only downloads own items
-      mutableSubscriptions.add(
-          // :emphasize-start:
-          realm.query<Item>(
-            'priority <= \$0',
-            [PriorityLevel.high],
-          ),
-          name: 'getUserItemsWithPriority');
-      // :emphasize-end:
-    });
-    // :emphasize-start:
-    // Sync subscriptions in the background
-    realm.subscriptions.waitForSynchronization();
+  final userItemSub = realm.subscriptions.findByName('getUserItems');
+  // :emphasize-start:
+  final userItemSubWithPriority =
+      realm.subscriptions.findByName('getUserItemsWithPriority');
+  // :emphasize-end:
+
+  // :emphasize-start:
+  if (userItemSub == null || userItemSubWithPriority == null) {
     // :emphasize-end:
+    Future(() {
+      realm.subscriptions.update((mutableSubscriptions) {
+        // :emphasize-start:
+        if (userItemSub != null) {
+          mutableSubscriptions.remove(userItemSub);
+        }
+        // :emphasize-end:
+        // server-side rules ensure user only downloads own items
+        mutableSubscriptions.add(
+            // :emphasize-start:
+            realm.query<Item>(
+              'priority <= \$0',
+              [PriorityLevel.high],
+            ),
+            name: 'getUserItemsWithPriority');
+        // :emphasize-end:
+      });
+    }).then((_) async {
+      // Sync subscriptions in the background
+      await realm.subscriptions.waitForSynchronization();
+    });
   }
   // :snippet-end:
   return realm;
@@ -46,6 +58,7 @@ void _oldVersion(User user, Configuration config, Realm realm) {
 
 void _postUpdateWithNullVersion(User user, Configuration config, Realm realm) {
   // :snippet-start: post-update
+  // TODO: update w additional remove changs
   // :emphasize-start:
   final userItemSub =
       realm.subscriptions.findByName('getUserItemsWithHighOrNoPriority');
