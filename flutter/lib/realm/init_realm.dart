@@ -15,29 +15,26 @@ Realm initRealm(User currentUser) {
   // :emphasize-end:
 
   // :emphasize-start:
-  if (userItemSub == null || userItemSubWithPriority == null) {
+  if (userItemSubWithPriority == null) {
     // :emphasize-end:
-    Future(() {
-      realm.subscriptions.update((mutableSubscriptions) {
-        // :emphasize-start:
-        if (userItemSub != null) {
-          mutableSubscriptions.remove(userItemSub);
-        }
-        // :emphasize-end:
-        // server-side rules ensure user only downloads own items
-        mutableSubscriptions.add(
-            // :emphasize-start:
-            realm.query<Item>(
-              'priority <= \$0',
-              [PriorityLevel.high],
-            ),
-            name: 'getUserItemsWithPriority');
-        // :emphasize-end:
-      });
-    }).then((_) async {
-      // Sync subscriptions in the background
-      await realm.subscriptions.waitForSynchronization();
+    realm.subscriptions.update((mutableSubscriptions) {
+      // :emphasize-start:
+      if (userItemSub != null) {
+        mutableSubscriptions.remove(userItemSub);
+      }
+      // :emphasize-end:
+      // server-side rules ensure user only downloads own items
+      mutableSubscriptions.add(
+          // :emphasize-start:
+          realm.query<Item>(
+            'priority <= \$0',
+            [PriorityLevel.high],
+          ),
+          name: 'getUserItemsWithPriority');
+      // :emphasize-end:
     });
+    // // Syncs in background
+    // realm.subscriptions.waitForSynchronization();
   }
   // :snippet-end:
   return realm;
@@ -52,27 +49,47 @@ void _oldVersion(User user, Configuration config, Realm realm) {
       // server-side rules ensure user only downloads own items
       mutableSubscriptions.add(realm.all<Item>(), name: 'getUserItems');
     });
+    // Syncs in background
+    // realm.subscriptions.waitForSynchronization();
   }
   // :snippet-end:
 }
 
 void _postUpdateWithNullVersion(User user, Configuration config, Realm realm) {
   // :snippet-start: post-update
-  // TODO: update w additional remove changs
+  // old subscriptions
+  final userItemSub = realm.subscriptions.findByName('getUserItems');
+  final userItemSubWithPriority =
+      realm.subscriptions.findByName('getUserItemsWithPriority');
   // :emphasize-start:
-  final userItemSub =
-      realm.subscriptions.findByName('getUserItemsWithHighOrNoPriority');
+  final userItemSubWithPriorityOrNothing =
+      realm.subscriptions.findByName('getUserItemsWithPriorityOrNothing');
   // :emphasize-end:
-  if (userItemSub == null) {
+
+  // :emphasize-start:
+  if (userItemSubWithPriorityOrNothing == null) {
+    // :emphasize-end:
     realm.subscriptions.update((mutableSubscriptions) {
-      // server-side rules ensure user only downloads own items
+      if (userItemSub != null) {
+        mutableSubscriptions.remove(userItemSub);
+      }
       // :emphasize-start:
+      if (userItemSubWithPriority != null) {
+        mutableSubscriptions.remove(userItemSubWithPriority);
+      }
+      // :emphasize-end:
+      // server-side rules ensure user only downloads own items
       mutableSubscriptions.add(
+          // :emphasize-start:
           realm.query<Item>(
-              'priority <= \$0 OR priority == nil', [PriorityLevel.high]),
-          name: 'getUserItemsWithHighOrNoPriority');
+            'priority <= \$0 OR priority == nil',
+            [PriorityLevel.high],
+          ),
+          name: 'getUserItemsWithPriorityOrNothing');
       // :emphasize-end:
     });
+    // Syncs in background
+    // realm.subscriptions.waitForSynchronization();
   }
   // :snippet-end:
 }
