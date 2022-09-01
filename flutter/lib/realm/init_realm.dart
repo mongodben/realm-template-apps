@@ -2,17 +2,17 @@ import 'package:flutter_todo/viewmodels/item_viewmodel.dart';
 import 'package:realm/realm.dart';
 import 'package:flutter_todo/realm/schemas.dart';
 
-Realm initRealm(User currentUser) {
+Realm initRealm(User currentUser) async {
   Configuration config = Configuration.flexibleSync(currentUser, [Item.schema]);
   Realm realm = Realm(
     config,
   );
   // :snippet-start: updated-sub
-  final userTaskSub =
+  final userItemSub =
       realm.subscriptions.findByName('getUserItemsWithPriority'); // :emphasize:
-  if (userTaskSub == null) {
+  if (userItemSub == null) {
     realm.subscriptions.update((mutableSubscriptions) {
-      // server-side rules ensure user only downloads own tasks
+      // server-side rules ensure user only downloads own items
       mutableSubscriptions.add(
           // :emphasize-start:
           realm.query<Item>(
@@ -22,6 +22,7 @@ Realm initRealm(User currentUser) {
           name: 'getUserItemsWithPriority');
       // :emphasize-end:
     });
+    await realm.subscriptions.waitForSynchronization();
   }
   // :snippet-end:
   return realm;

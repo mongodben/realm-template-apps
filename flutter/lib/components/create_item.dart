@@ -65,7 +65,7 @@ class CreateItemForm extends StatefulWidget {
 class _CreateItemFormState extends State<CreateItemForm> {
   int _priority = PriorityLevel.low; // :emphasize:
   final _formKey = GlobalKey<FormState>();
-  var taskEditingController = TextEditingController();
+  var itemEditingController = TextEditingController();
 
   // :emphasize-start:
   void _setPriority(int priority) {
@@ -93,7 +93,7 @@ class _CreateItemFormState extends State<CreateItemForm> {
             style: myTextTheme.headline6,
           ),
           TextFormField(
-            controller: taskEditingController,
+            controller: itemEditingController,
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Please enter some text';
@@ -129,7 +129,7 @@ class _CreateItemFormState extends State<CreateItemForm> {
                         child: const Text('Create'),
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
-                            final summary = taskEditingController.text;
+                            final summary = itemEditingController.text;
                             // :emphasize-start:
                             ItemViewModel.create(
                                 realm,
