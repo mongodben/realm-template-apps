@@ -33,8 +33,6 @@ Realm initRealm(User currentUser) {
           name: 'getUserItemsWithPriority');
       // :emphasize-end:
     });
-    // // Syncs in background
-    // realm.subscriptions.waitForSynchronization();
   }
   // :snippet-end:
   return realm;
@@ -49,8 +47,6 @@ void _oldVersion(User user, Configuration config, Realm realm) {
       // server-side rules ensure user only downloads own items
       mutableSubscriptions.add(realm.all<Item>(), name: 'getUserItems');
     });
-    // Syncs in background
-    // realm.subscriptions.waitForSynchronization();
   }
   // :snippet-end:
 }
@@ -88,8 +84,6 @@ void _postUpdateWithNullVersion(User user, Configuration config, Realm realm) {
           name: 'getUserItemsWithPriorityOrNothing');
       // :emphasize-end:
     });
-    // Syncs in background
-    // realm.subscriptions.waitForSynchronization();
   }
   // :snippet-end:
 }
