@@ -153,5 +153,5 @@ class _CreateItemFormState extends State<CreateItemForm> {
   }
 }
 // :remove-end:
-// ...closing brackets and parenthesis
+// ...closing brackets and parentheses
 // :snippet-end:
