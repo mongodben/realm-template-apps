@@ -2,7 +2,7 @@ import 'package:flutter_todo/viewmodels/item_viewmodel.dart';
 import 'package:realm/realm.dart';
 import 'package:flutter_todo/realm/schemas.dart';
 
-Realm initRealm(User currentUser) async {
+Realm initRealm(User currentUser) {
   Configuration config = Configuration.flexibleSync(currentUser, [Item.schema]);
   Realm realm = Realm(
     config,
@@ -22,7 +22,10 @@ Realm initRealm(User currentUser) async {
           name: 'getUserItemsWithPriority');
       // :emphasize-end:
     });
-    await realm.subscriptions.waitForSynchronization();
+    // :emphasize-start:
+    // Sync subscriptions in the background
+    realm.subscriptions.waitForSynchronization();
+    // :emphasize-end:
   }
   // :snippet-end:
   return realm;
