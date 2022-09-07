@@ -17,12 +17,12 @@ class ItemViewModel {
   ItemViewModel(Realm realm, Item item)
       : this._(realm, item, item.id, item.summary, item.ownerId,
             item.isComplete, item.priority ?? PriorityLevel.low);
+  // :emphasize-end:
 
   static ItemViewModel create(Realm realm, Item item) {
     final itemInRealm = realm.write<Item>(() => realm.add<Item>(item));
     return ItemViewModel(realm, item);
   }
-  // :emphasize-end:
 
   void delete() {
     realm.write(() => realm.delete(item));
