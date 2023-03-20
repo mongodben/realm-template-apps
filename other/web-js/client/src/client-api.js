@@ -101,6 +101,7 @@ export class ClientApi {
    */
   registerUser = async (provider, credentials) => {
     const url = this.#endpointUrl(`/auth/providers/${provider}/register`);
+    console.log("register URL::", url);
     const response = await fetch(url, {
       method: "POST",
       headers: {
@@ -112,7 +113,9 @@ export class ClientApi {
       // Status 201 means the user was created. There is no response body.
       return;
     } else {
-      throw new ClientApiError(await response.json());
+      const data = await response.json();
+      console.log("ERR MSG::", data);
+      throw new ClientApiError(data);
     }
   };
 
@@ -133,6 +136,7 @@ export class ClientApi {
    */
   logIn = async (provider, credentials) => {
     const url = this.#endpointUrl(`/auth/providers/${provider}/login`);
+    console.log("URL::", url);
     const response = await fetch(url, {
       method: "POST",
       cache: "no-cache",
@@ -189,7 +193,6 @@ export class ClientApi {
     }
     return this.currentUser;
   };
-
 
   /**
    * Get a new access token with a refresh token.

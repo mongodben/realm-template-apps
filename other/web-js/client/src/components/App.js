@@ -19,7 +19,10 @@ const { appId } = appConfig;
 // :state-start: development
 export default function ProvidedApp() {
   const Provider = API_TYPE_NAME === "Data API" ? DataApiProvider : AppProvider;
-  const location = API_TYPE_NAME === "Data API" ? { deployment_model: "GLOBAL" } : {};
+  const location =
+    API_TYPE_NAME === "Data API"
+      ? { deployment_model: "LOCAL", region: "us-east-1", cloud: "aws" }
+      : {};
   return (
     <ThemeProvider>
       <Provider appId={appId} location={location}>
@@ -66,7 +69,9 @@ export default function ProvidedApp() {
 
 function App() {
   // :state-start: development
-  const { currentUser, logOut } = (API_TYPE_NAME === "Data API" ? useDataApi : useApp)();
+  const { currentUser, logOut } = (
+    API_TYPE_NAME === "Data API" ? useDataApi : useApp
+  )();
   // :state-end:
   // :state-uncomment-start: prod-mql
   // const { currentUser, logOut } = useApp();

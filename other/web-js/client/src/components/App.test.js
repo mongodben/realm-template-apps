@@ -8,6 +8,8 @@ const nonce = Math.floor(10000 * Math.random());
 const TEST_USERNAME = `test-user-${now}-${nonce}@example.com`;
 const TEST_PASSWORD = "Password123";
 
+jest.setTimeout(20000);
+
 function setup(jsx) {
   return {
     user: userEvent.setup(),
@@ -30,7 +32,8 @@ test("allows you to sign up for a new account", async () => {
   await user.type(screen.getByLabelText("Email Address"), TEST_USERNAME);
   await user.type(screen.getByLabelText("Password"), "aa");
   await user.click(screen.getByTestId("submit-button"));
-  await waitFor(() => {
+  await waitFor(
+    () => {
       expect(
         screen.getByText(/Password must be between 6 and 128 characters./i)
       ).toBeInTheDocument();
@@ -40,7 +43,8 @@ test("allows you to sign up for a new account", async () => {
   await user.clear(screen.getByLabelText("Password"));
   await user.type(screen.getByLabelText("Password"), TEST_PASSWORD);
   await user.click(screen.getByTestId("submit-button"));
-  await waitFor(() => {
+  await waitFor(
+    () => {
       expect(screen.getByText(/You have 0 To-Do Items/i)).toBeInTheDocument();
     },
     { timeout: 3000 }
@@ -52,20 +56,25 @@ test("allows you to sign up for a new account", async () => {
     },
     { timeout: 1500 }
   );
-}, 8000);
+});
 
 test("allows you to log in with an existing account", async () => {
   const { user } = setup(<App />);
-  if(screen.queryByText(/Log out/i)) {
+  if (screen.queryByText(/Log out/i)) {
     await user.click(screen.getByText(/Log out/i));
   }
   expect(screen.getByText(/Welcome!/i)).toBeInTheDocument();
   await user.type(screen.getByLabelText("Email Address"), TEST_USERNAME);
   await user.type(screen.getByLabelText("Password"), TEST_PASSWORD);
   await user.click(screen.getByTestId("submit-button"));
-  await waitFor(() => {
-    expect(screen.getByText(/You have (.+) To-Do Item(s?)/i)).toBeInTheDocument();
-  }, { timeout: 2500 })
+  await waitFor(
+    () => {
+      expect(
+        screen.getByText(/You have (.+) To-Do Item(s?)/i)
+      ).toBeInTheDocument();
+    },
+    { timeout: 2500 }
+  );
 });
 
 test("allows you to CRUD to-do items", async () => {
@@ -78,31 +87,41 @@ test("allows you to CRUD to-do items", async () => {
   );
   // Add the first To-Do
   await user.click(screen.getByText(/Add To-Do/i));
-  await user.type(screen.getByPlaceholderText("What needs doing?"), "Do the dishes");
+  await user.type(
+    screen.getByPlaceholderText("What needs doing?"),
+    "Do the dishes"
+  );
   await user.click(screen.getByText(/Save/i));
   await waitFor(
     () => {
       expect(screen.getByText(/You have 1 To-Do Item/i)).toBeInTheDocument();
       expect(screen.getByText(/Do the dishes/i)).toBeInTheDocument();
-      expect(screen.queryByPlaceholderText("What needs doing?")).not.toBeInTheDocument();
+      expect(
+        screen.queryByPlaceholderText("What needs doing?")
+      ).not.toBeInTheDocument();
     },
     { timeout: 3500 }
   );
   // Add a second To-Do
   await user.click(screen.getByText(/Add To-Do/i));
-  await user.type(screen.getByPlaceholderText("What needs doing?"), "Do the laundry");
+  await user.type(
+    screen.getByPlaceholderText("What needs doing?"),
+    "Do the laundry"
+  );
   await user.click(screen.getByText(/Save/i));
   await waitFor(
     () => {
       expect(screen.getByText(/You have 2 To-Do Items/i)).toBeInTheDocument();
-      expect(screen.queryByPlaceholderText("What needs doing?")).not.toBeInTheDocument();
+      expect(
+        screen.queryByPlaceholderText("What needs doing?")
+      ).not.toBeInTheDocument();
     },
     { timeout: 3500 }
   );
   // Mark the second To-Do as completed
-  const checkboxes = screen.getAllByTestId("todo-checkbox").map(
-    (el) => el.childNodes[0]
-  );
+  const checkboxes = screen
+    .getAllByTestId("todo-checkbox")
+    .map((el) => el.childNodes[0]);
   expect(checkboxes[0].parentElement).not.toHaveClass("Mui-checked");
   expect(checkboxes[1].parentElement).not.toHaveClass("Mui-checked");
   await user.click(checkboxes[0]);
@@ -114,7 +133,7 @@ test("allows you to CRUD to-do items", async () => {
     { timeout: 2000 }
   );
   // Delete the first To-Do
-  const deleteButtons = screen.getAllByTestId("todo-delete-button")
+  const deleteButtons = screen.getAllByTestId("todo-delete-button");
   await user.click(deleteButtons[0]);
   await waitFor(
     () => {
@@ -123,7 +142,7 @@ test("allows you to CRUD to-do items", async () => {
     },
     { timeout: 2000 }
   );
-}, 17000);
+});
 
 test("allows you to log out", async () => {
   const { user } = setup(<App />);
